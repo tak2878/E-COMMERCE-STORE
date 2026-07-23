@@ -16,7 +16,8 @@
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
