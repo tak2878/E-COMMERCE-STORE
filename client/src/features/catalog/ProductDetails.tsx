@@ -11,21 +11,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import type { Product } from "../../app/models/product";
+import { useFetchProductDetailsQuery } from "./catalogApi";
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
 
-  useEffect(() => {
-    fetch(`http://localhost:5001/api/products/${id}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data))
-      .catch((error) => console.log(error));
-  }, [id]);
+  const { data: product, isLoading } = useFetchProductDetailsQuery(
+    id ? +id : 0
+  );
 
-  if (!product) return <div>Loading...</div>;
+  if (!product || isLoading) return <div>Loading...</div>;
 
   const productDetails = [
     { label: "Name", value: product.name },
@@ -51,11 +46,13 @@ export default function ProductDetails() {
           ${(product?.price ?? 0 / 100).toFixed(2)}
         </Typography>
         <TableContainer>
-          <Table sx={{
-            '& td' : {
-              fontSize : '1rem'
-            }
-          }}>
+          <Table
+            sx={{
+              "& td": {
+                fontSize: "1rem",
+              },
+            }}
+          >
             <TableBody>
               {productDetails.map((detail, index) => (
                 <TableRow key={index}>
