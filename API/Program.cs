@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,19 +12,22 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 builder.Services.AddCors();
 
+builder.Services.AddTransient<ExceptionMiddleware>();
+
+
 var app = builder.Build();
-
-// app.UseCors(opt =>
-// {
-//     opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000","https://localhost:3000"); 
-// });
-
-app.UseCors(policy =>
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors(opt =>
 {
-    policy.AllowAnyOrigin()
-          .AllowAnyHeader()
-          .AllowAnyMethod();
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000","http://localhost:3000"); 
 });
+
+// app.UseCors(policy =>
+// {
+//     policy.AllowAnyOrigin()
+//           .AllowAnyHeader()
+//           .AllowAnyMethod();
+// });
 
 app.MapControllers();
 
